@@ -1,0 +1,17 @@
+{
+	"extends": ["eslint:recommended", "plugin:react/recommended", "plugin:react-hooks/recommended"],
+	"parserOptions": {
+		"ecmaVersion": 2021,
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"sourceType": "module"
+	},
+	"rules": {
+		"react-hooks/rules-of-hooks": "error",
+		"react-hooks/exhaustive-deps": "warn"
+	},
+	"plugins": ["react", "react-hooks"],
+	"ignorePatterns": ["./plugins", "**/*.js"]
+}
+

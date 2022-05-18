@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"module": "commonjs",
+		"target": "es6",
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"rootDir": "src",
+		"outDir": "./plugin/",
+		"noEmitOnError": true,
+		"jsx": "react",
+		"typeRoots": ["node_modules/@types"],
+		"resolveJsonModule": true,
+		"baseUrl": "src",
+		"paths": {
+			"@components/*": ["components/*"],
+			"@models/*": ["models/*"],
+			"@services/*": ["services/*"],
+			"@pages/*": ["pages/*"],
+		}
+	}
+}
