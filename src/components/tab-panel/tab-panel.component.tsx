@@ -6,24 +6,31 @@ import { Box, Button } from '@mui/material';
 interface TabPanelProps {
 	index: number;
 	configFile?: IConfigFile;
-	onChange: (configFile: IConfigFile) => void;
-	onSaveNewFile: (newConfigFile: IConfigFile) => void;
+	onSaveFile: (newConfigFile: IConfigFile) => void;
 	onRemoveFile: (fileToRemove: IConfigFile) => void;
 }
 
-const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onChange, onSaveNewFile, onRemoveFile }) => {
-	const [editedFile, setEditedFile] = useState<IConfigFile | undefined>(configFile);
+const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onSaveFile, onRemoveFile }) => {
+	const [editedFile, setEditedFile] = useState<Record<string, any> | undefined>(configFile?.file);
+	const [newFile, setNewFile] = useState<IConfigFile | undefined>(configFile);
 
 	const handleOnChange = (changedFile: IConfigFile) => {
 		setEditedFile(changedFile);
-		if (configFile) {
-			return onChange(changedFile);
+		if (!configFile) {
+			setNewFile(changedFile);
 		}
 	};
 
-	const handleSaveFile = () => {
-		if (editedFile) {
-			onSaveNewFile(editedFile);
+	const handleSaveEditFile = () => {
+		if (configFile && editedFile) {
+			configFile.file = editedFile;
+			onSaveFile(configFile);
+		}
+	}
+
+	const handleSaveNewFile = () => {
+		if (newFile) {
+			onSaveFile(newFile);
 		}
 	};
 
@@ -31,11 +38,16 @@ const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onCha
 		<Box>
 			<JsonEditorComponent configFile={configFile} onChange={handleOnChange} />
 			{!configFile && (
-				<Button disabled={!editedFile} onClick={handleSaveFile}>
+				<Button disabled={!editedFile} onClick={handleSaveNewFile}>
 					Save new file
 				</Button>
 			)}
-			{configFile && <Button onClick={() => onRemoveFile(configFile)}>Remove the file</Button>}
+			{configFile && (
+				<>
+					<Button onClick={() => onRemoveFile(configFile)}>Remove the file {configFile.name}</Button>
+					<Button disabled={!editedFile} onClick={handleSaveEditFile}>Save changes for {configFile.name}</Button>
+				</>
+			)}
 		</Box>
 	);
 };

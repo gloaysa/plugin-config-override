@@ -37,11 +37,10 @@ const ConfigurationOverrideComponent = () => {
 		<Box>
 			<TabsComponent currentTab={currentTab} setCurrentTab={handleChangeTab} configFiles={configFiles} />
 			<TabPanelComponent
-				onSaveNewFile={storeFile}
+				onSaveFile={storeFile}
 				onRemoveFile={removeFile}
 				configFile={currentFile}
 				index={currentTab}
-				onChange={storeFile}
 			/>
 
 			<footer style={{ color: 'gray', position: 'fixed', bottom: 0 }}>

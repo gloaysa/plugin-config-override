@@ -13,8 +13,19 @@ export class ConfigFilesService {
 
 	public storeConfigFile(file: IConfigFile): Promise<IConfigFile[]> {
 		return new Promise(async (resolve) => {
+			let newConfigFiles: IConfigFile[];
 			const currentFiles = await this.getAllConfigFiles();
-			const newConfigFiles = [...currentFiles, file];
+			if (currentFiles.some(({ name }) => name === file.name)) {
+				newConfigFiles = currentFiles.map((existingFile) => {
+					if (existingFile.name === file.name) {
+						return file;
+					}
+					return existingFile;
+				});
+			} else {
+				newConfigFiles = [...currentFiles, file];
+			}
+
 			const storageObject: IChromeStorage = {
 				configurations: newConfigFiles,
 			};
