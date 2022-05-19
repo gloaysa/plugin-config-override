@@ -55,4 +55,18 @@ export class ConfigFilesService {
 			});
 		});
 	}
+
+	filterConfigurationsFromObject(filter: Record<any, string>): Promise<IConfigFile[] | undefined> {
+		return new Promise((resolve) => {
+			chrome.storage.local.get(['configurations'], ({ configurations }) => {
+				const filteredConfigurations = configurations?.filter((config: IConfigFile) => {
+					return Object.entries(filter).some(([mapValue, configRequested]) => {
+						config.mapValue = mapValue.replace('configName', 'getConfiguration');
+						return configRequested === config.name;
+					});
+				});
+				resolve(filteredConfigurations?.length ? filteredConfigurations : undefined);
+			});
+		});
+	}
 }
