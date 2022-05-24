@@ -4,6 +4,8 @@ import { ConfigResponse, DebuggerFetch, EventParams } from '@models/chrome-debug
 import { ConfigFilesService } from '@services/config-files.service';
 import { getHeaderString, replaceConfigurations } from './utils';
 import ExtensionPanel = chrome.devtools.panels.ExtensionPanel;
+import HttpHeader = chrome.webRequest.HttpHeader;
+import WebResponseHeadersDetails = chrome.webRequest.WebResponseHeadersDetails;
 
 class Devtools {
 	private static instance: Devtools;
@@ -16,6 +18,8 @@ class Devtools {
 
 	private extPanelWindow: Window | undefined;
 	private currentTab: chrome.tabs.Tab | undefined;
+
+	private responseHeaders: HttpHeader[] | undefined;
 
 	private panelOpened = false;
 
@@ -69,6 +73,19 @@ class Devtools {
 	}
 
 	listenForCalls() {
+		const setResponseHeaders = (details: WebResponseHeadersDetails) => {
+			this.responseHeaders = details.responseHeaders;
+			return { responseHeaders: this.responseHeaders };
+		};
+		chrome.webRequest.onHeadersReceived.addListener(
+			setResponseHeaders,
+			{
+				tabId: this.currentTab?.id,
+				urls: ['<all_urls>'],
+			},
+			['blocking', 'responseHeaders', 'extraHeaders']
+		);
+
 		this.debuggerService.onEvent(async (source, method, params) => {
 			if (!params) {
 				return;
@@ -102,7 +119,7 @@ class Devtools {
 		response.body.data = replaceConfigurations(data, configurations);
 
 		commandParams.responseCode = 200;
-		commandParams.responseHeaders = response.headers;
+		commandParams.responseHeaders = this.responseHeaders;
 		commandParams.body = btoa(unescape(encodeURIComponent(JSON.stringify(response.body))));
 
 		await this.debuggerService.fulfillRequest(this.debuggerInstance, commandParams);

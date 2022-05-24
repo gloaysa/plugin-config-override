@@ -12,6 +12,8 @@
 	},
 	"devtools_page": "./extensions/devtools.html",
 	"permissions": [
+		"webRequest",
+		"webRequestBlocking",
 		"debugger",
 		"storage",
 		"tabs",
