@@ -6,12 +6,14 @@ import { getHeaderString, replaceConfigurations } from './utils';
 import ExtensionPanel = chrome.devtools.panels.ExtensionPanel;
 import HttpHeader = chrome.webRequest.HttpHeader;
 import WebResponseHeadersDetails = chrome.webRequest.WebResponseHeadersDetails;
+import { WebRequestService } from '@services/web-request.service';
 
 class Devtools {
 	private static instance: Devtools;
 
 	private devtoolsService: DevtoolsService;
 	private debuggerService: DebuggerService;
+	private webRequestService: WebRequestService;
 	private configFilesService: ConfigFilesService;
 
 	private debuggerInstance: chrome.debugger.Debuggee;
@@ -21,7 +23,7 @@ class Devtools {
 
 	private responseHeaders: HttpHeader[] | undefined;
 
-	private panelOpened = false;
+	private debuggerAttached = false;
 
 	static getInstance() {
 		if (!this.instance) {
@@ -33,6 +35,7 @@ class Devtools {
 	constructor() {
 		this.devtoolsService = DevtoolsService.getInstance();
 		this.debuggerService = DebuggerService.getInstance();
+		this.webRequestService = WebRequestService.getInstance();
 		this.configFilesService = ConfigFilesService.getInstance();
 		this.debuggerInstance = {};
 		this.devtoolsService
@@ -44,8 +47,8 @@ class Devtools {
 		panel.onShown.addListener(async (panelWindow) => {
 			this.extPanelWindow = panelWindow;
 			this.currentTab = await this.setCurrentTab();
-			if (!this.panelOpened) {
-				this.panelOpened = true;
+			if (!this.debuggerAttached) {
+				this.debuggerAttached = true;
 				await this.createDebuggerInstance();
 			}
 		});
@@ -58,7 +61,7 @@ class Devtools {
 				if (this.currentTab?.id !== tab[0].id) {
 					resolve(tab[0]);
 				}
-				resolve(undefined);
+				resolve(this.currentTab);
 			});
 		});
 	}
@@ -77,7 +80,11 @@ class Devtools {
 			this.responseHeaders = details.responseHeaders;
 			return { responseHeaders: this.responseHeaders };
 		};
-		chrome.webRequest.onHeadersReceived.addListener(
+
+		this.debuggerService.onDetach(() => {
+			this.debuggerAttached = false;
+		});
+		this.webRequestService.onHeadersReceived(
 			setResponseHeaders,
 			{
 				tabId: this.currentTab?.id,

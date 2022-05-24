@@ -55,4 +55,8 @@ export class DebuggerService {
 		// @ts-ignore
 		chrome.debugger.onEvent.addListener(callback);
 	}
+
+	onDetach(callback: () => void) {
+		chrome.debugger.onDetach.addListener(callback);
+	}
 }
