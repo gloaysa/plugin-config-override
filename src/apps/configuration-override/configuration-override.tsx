@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
 import './configuration-override.css';
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
-
+import { Box, Button, Typography } from '@mui/material';
 import TabsComponent from '@components/tabs/tabs.component';
 import TabPanelComponent from '@components/tab-panel/tab-panel.component';
 import { IConfigFile } from '@models/config-file.interface';
 import { ConfigFilesService } from '@services/config-files.service';
+import ConfigCheckboxesComponent from '@components/config-checkboxes/config-checkboxes.component';
 
 const ConfigurationOverrideComponent = () => {
 	const configFilesService: ConfigFilesService = ConfigFilesService.getInstance();
@@ -45,9 +45,9 @@ const ConfigurationOverrideComponent = () => {
 		setCurrentTab(newTab);
 	};
 
-	const handleCheckbox = (configName: IConfigFile, event: any) => {
+	const handleCheckbox = (configName: IConfigFile, checked: boolean) => {
 		savingOverride = true;
-		configFilesService.storeFileOverride(configName, event.checked).then((configFiles) => {
+		configFilesService.storeFileOverride(configName, checked).then((configFiles) => {
 			setConfigFiles(configFiles);
 			savingOverride = false;
 		});
@@ -64,21 +64,11 @@ const ConfigurationOverrideComponent = () => {
 
 	return (
 		<Box className="configuration-override">
-			<Box>
-				<Typography>Select the configurations that you want to override</Typography>
-				<FormGroup className="configuration-override__form-group">
-					{configFiles?.map((configFile, index) => (
-						<FormControlLabel
-							disabled={savingOverride}
-							onChange={({ target }) => handleCheckbox(configFile, target)}
-							className="form-group__checkbox"
-							key={index}
-							control={<Checkbox checked={configFile.override} />}
-							label={configFile.name}
-						/>
-					))}
-				</FormGroup>
-			</Box>
+			<ConfigCheckboxesComponent
+				handleCheckbox={handleCheckbox}
+				configFiles={configFiles}
+				savingOverride={savingOverride}
+			></ConfigCheckboxesComponent>
 			<Typography>Below you can add and edit configuration files</Typography>
 			<TabsComponent currentTab={currentTab} setCurrentTab={handleChangeTab} configFiles={configFiles} />
 			<TabPanelComponent
