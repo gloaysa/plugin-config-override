@@ -2,6 +2,8 @@
 
 Override configurations coming from configuration service
 
+You can download the latest version [here](./plugin.zip)
+
 ## Project Structure
 
 - src: Source files and app main file
