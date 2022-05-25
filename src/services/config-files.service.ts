@@ -11,6 +11,21 @@ export class ConfigFilesService {
 		return this.instance;
 	}
 
+	getOverrideMode(): Promise<boolean> {
+		return new Promise((resolve) => {
+			chrome.storage.local.get(['overrideMode'], ({ overrideMode }) => {
+				resolve(overrideMode);
+			});
+		});
+	}
+
+	async setOverrideMode(override: boolean) {
+		const storageObject: IChromeStorage = {
+			overrideMode: override,
+		};
+		await chrome.storage.local.set(storageObject);
+	}
+
 	public async storeFileOverride(configFile: IConfigFile, override: boolean): Promise<IConfigFile[]> {
 		const currentConfigFiles = await this.getAllConfigFiles();
 		const newConfigFiles = currentConfigFiles.map((existingFile) => {
@@ -27,29 +42,26 @@ export class ConfigFilesService {
 		return storageObject.configurations || [];
 	}
 
-	public storeConfigFile(file: IConfigFile): Promise<IConfigFile[]> {
-		return new Promise(async (resolve) => {
-			let newConfigFiles: IConfigFile[];
-			const currentFiles = await this.getAllConfigFiles();
-			if (currentFiles.some(({ name }) => name === file.name)) {
-				newConfigFiles = currentFiles.map((existingFile) => {
-					if (existingFile.name === file.name) {
-						return file;
-					}
-					return existingFile;
-				});
-			} else {
-				file.override = false;
-				newConfigFiles = [...currentFiles, file];
-			}
-
-			const storageObject: IChromeStorage = {
-				configurations: newConfigFiles,
-			};
-			chrome.storage.local.set(storageObject, () => {
-				resolve(newConfigFiles);
+	public async storeConfigFile(file: IConfigFile): Promise<IConfigFile[]> {
+		let newConfigFiles: IConfigFile[];
+		const currentFiles = await this.getAllConfigFiles();
+		if (currentFiles.some(({ name }) => name === file.name)) {
+			newConfigFiles = currentFiles.map((existingFile) => {
+				if (existingFile.name === file.name) {
+					return file;
+				}
+				return existingFile;
 			});
-		});
+		} else {
+			file.override = false;
+			newConfigFiles = [...currentFiles, file];
+		}
+
+		const storageObject: IChromeStorage = {
+			configurations: newConfigFiles,
+		};
+		await chrome.storage.local.set(storageObject);
+		return newConfigFiles;
 	}
 
 	public removeConfigFile(fileToRemove: IConfigFile): Promise<IConfigFile[]> {
@@ -61,14 +73,6 @@ export class ConfigFilesService {
 			};
 			chrome.storage.local.set(storageObject, () => {
 				resolve(filteredConfigFiles);
-			});
-		});
-	}
-
-	public getAllConfigOverrides(): Promise<string[]> {
-		return new Promise((resolve) => {
-			chrome.storage.local.get(['overrides'], ({ overrides }) => {
-				resolve(overrides?.length ? overrides : []);
 			});
 		});
 	}
@@ -90,5 +94,13 @@ export class ConfigFilesService {
 			});
 		});
 		return filteredConfigurations?.length ? filteredConfigurations : undefined;
+	}
+
+	onConfigChanges(callback: (configurations: IConfigFile[]) => void) {
+		chrome.storage.onChanged.addListener(({ configurations }) => {
+			if (configurations) {
+				callback(configurations.newValue);
+			}
+		})
 	}
 }

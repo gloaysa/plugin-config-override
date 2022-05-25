@@ -2,7 +2,7 @@ import { DevtoolsService } from '@services/devtools.service';
 import { DebuggerService } from '@services/debugger.service';
 import { ConfigResponse, DebuggerFetch, EventParams } from '@models/chrome-debugger.interface';
 import { ConfigFilesService } from '@services/config-files.service';
-import { getHeaderString, replaceConfigurations } from './utils';
+import { createConfigFileFromResponse, getHeaderString, replaceConfigurations } from './utils';
 import ExtensionPanel = chrome.devtools.panels.ExtensionPanel;
 import HttpHeader = chrome.webRequest.HttpHeader;
 import WebResponseHeadersDetails = chrome.webRequest.WebResponseHeadersDetails;
@@ -114,10 +114,20 @@ class Devtools {
 
 	async overrideAndSendNewResponse(request: EventParams['request'], commandParams: Record<string, any>) {
 		const response = await this.getResponseBody(request);
-		const { variables } = JSON.parse(request.postData);
+		const { variables }: {variables: Record<string, string>} = JSON.parse(request.postData);
 		const { data } = response.body;
 
 		const configurations = await this.configFilesService.filterConfigurationsFromObject(variables);
+
+		const overrideMode = await this.configFilesService.getOverrideMode();
+		if (overrideMode) {
+			const newFiles = createConfigFileFromResponse(variables, data);
+			for (const file of newFiles) {
+				await this.configFilesService.storeConfigFile(file);
+			}
+			return await this.debuggerService.continueResponse(this.debuggerInstance, commandParams);
+		}
+
 
 		if (!configurations) {
 			return await this.debuggerService.continueResponse(this.debuggerInstance, commandParams);

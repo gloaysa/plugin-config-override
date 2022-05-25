@@ -18,3 +18,21 @@ export const replaceConfigurations = (
 	});
 	return body;
 };
+
+export const createConfigFileFromResponse = (
+	configsRequested: Record<string, string>,
+	configsReceived: Record<string, any>
+): IConfigFile[] => {
+	return Object.entries(configsRequested).map(
+		([configMap, configName]): IConfigFile => {
+			const mapValue = configMap.replace('configName', 'getConfiguration');
+			return {
+				name: configName,
+				file: configsReceived[mapValue],
+				mapValue: mapValue,
+				override: false,
+			};
+		}
+	).filter((configFile) => !!configFile.file)
+		.sort((a, b) => a.name.localeCompare(b.name));
+};

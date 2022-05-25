@@ -7,11 +7,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 interface TabPanelProps {
 	index: number;
 	configFile?: IConfigFile;
-	onSaveFile: (newConfigFile: IConfigFile) => void;
+	onSaveExistingFile: (editedConfigFile: IConfigFile) => void;
+	onCreateNewFile: (newConfigFile: IConfigFile) => void;
 	onRemoveFile: (fileToRemove: IConfigFile) => void;
 }
 
-const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onSaveFile, onRemoveFile }) => {
+const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onSaveExistingFile, onRemoveFile, onCreateNewFile }) => {
 	const [editedFile, setEditedFile] = useState<Record<string, any> | undefined>(configFile?.file);
 	const [newFile, setNewFile] = useState<IConfigFile | undefined>(configFile);
 	const [fileHasChanged, setFileHasChanged] = useState<boolean>(false);
@@ -31,13 +32,13 @@ const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onSav
 	const handleSaveEditFile = () => {
 		if (configFile && editedFile) {
 			configFile.file = editedFile;
-			onSaveFile(configFile);
+			onSaveExistingFile(configFile);
 		}
 	};
 
 	const handleSaveNewFile = () => {
 		if (newFile) {
-			onSaveFile(newFile);
+			onCreateNewFile(newFile);
 		}
 	};
 

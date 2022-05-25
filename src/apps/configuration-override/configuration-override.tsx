@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
 import './configuration-override.css';
-import { Box, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
 
 import TabsComponent from '@components/tabs/tabs.component';
 import TabPanelComponent from '@components/tab-panel/tab-panel.component';
@@ -17,19 +17,26 @@ const ConfigurationOverrideComponent = () => {
 	useEffect(() => {
 		configFilesService.getAllConfigFiles().then((files) => {
 			setConfigFiles(files);
+			configFilesService.onConfigChanges((filesChanged) => setConfigFiles(filesChanged));
 		});
 	}, [configFilesService, setConfigFiles]);
 
-	const storeFile = (file: IConfigFile) => {
+	useEffect(() => {
+		configFilesService.setOverrideMode(false);
+	}, [configFilesService, configFiles]);
+
+	const saveExistingFile = (file: IConfigFile) => {
+		configFilesService.storeConfigFile(file);
+	};
+
+	const saveNewFile = (file: IConfigFile) => {
 		configFilesService.storeConfigFile(file).then((allFiles) => {
-			setConfigFiles(allFiles);
 			setCurrentTab(allFiles.length - 1);
 		});
 	};
 
 	const removeFile = (file: IConfigFile) => {
-		configFilesService.removeConfigFile(file).then((allFiles) => {
-			setConfigFiles(allFiles);
+		configFilesService.removeConfigFile(file).then(() => {
 			setCurrentTab(currentTab ? currentTab - 1 : currentTab);
 		});
 	};
@@ -43,6 +50,15 @@ const ConfigurationOverrideComponent = () => {
 		configFilesService.storeFileOverride(configName, event.checked).then((configFiles) => {
 			setConfigFiles(configFiles);
 			savingOverride = false;
+		});
+	};
+
+	const handleGetConfigurations = () => {
+		chrome.tabs.query({ active: true, currentWindow: true }, async (arrayOfTabs) => {
+			if (arrayOfTabs[0].id) {
+				await configFilesService.setOverrideMode(true);
+				await chrome.tabs.reload(arrayOfTabs[0].id);
+			}
 		});
 	};
 
@@ -66,11 +82,13 @@ const ConfigurationOverrideComponent = () => {
 			<Typography>Below you can add and edit configuration files</Typography>
 			<TabsComponent currentTab={currentTab} setCurrentTab={handleChangeTab} configFiles={configFiles} />
 			<TabPanelComponent
-				onSaveFile={storeFile}
+				onSaveExistingFile={saveExistingFile}
+				onCreateNewFile={saveNewFile}
 				onRemoveFile={removeFile}
 				configFile={configFiles[currentTab]}
 				index={currentTab}
 			/>
+			<Button onClick={handleGetConfigurations}>Get configurations from server</Button>
 
 			<footer className="configuration-override__footer">
 				<Box>
