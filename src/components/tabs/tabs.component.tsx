@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Box, styled, Tab, Tabs } from '@mui/material';
 import { IConfigFile } from '@models/config-file.interface';
-import './tabs.component.css'
+import './tabs.component.css';
 
 interface StyledTabProps {
 	label: string;
@@ -37,7 +37,7 @@ const TabsComponent: FunctionComponent<TabsComponentProps> = ({ currentTab, setC
 				{configFiles?.map((configFile, index) => (
 					<AntTab key={index} label={configFile.name} />
 				))}
-				<AntTab className='tab--new-file' label='Add new config file'/>
+				<AntTab className="tab--new-file" label="New" />
 			</Tabs>
 		</Box>
 	);
