@@ -1,4 +1,4 @@
-# ![Logo](src/assets/images/icon-50.png) ONEShop Config Override Chrome Extension
+# Config Override Chrome Extension
 
 Override configurations coming from configuration service
 
