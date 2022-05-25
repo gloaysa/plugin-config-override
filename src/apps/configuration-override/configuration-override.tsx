@@ -11,28 +11,31 @@ import { ConfigFilesService } from '@services/config-files.service';
 const ConfigurationOverrideComponent = () => {
 	const configFilesService: ConfigFilesService = ConfigFilesService.getInstance();
 	const [currentTab, setCurrentTab] = useState<number>(0);
-	const [configFiles, setConfigFiles] = useState<IConfigFile[] | undefined>(undefined);
-	const [currentFile, setCurrentFile] = useState<IConfigFile | undefined>(undefined);
+	const [configFiles, setConfigFiles] = useState<IConfigFile[]>([]);
 	let savingOverride = false;
 
 	useEffect(() => {
 		configFilesService.getAllConfigFiles().then((files) => {
 			setConfigFiles(files);
-			setCurrentFile(files[currentTab]);
 		});
 	}, [configFilesService, setConfigFiles]);
 
 	const storeFile = (file: IConfigFile) => {
-		configFilesService.storeConfigFile(file).then((allFiles) => setConfigFiles(allFiles));
+		configFilesService.storeConfigFile(file).then((allFiles) => {
+			setConfigFiles(allFiles);
+			setCurrentTab(allFiles.length - 1);
+		});
 	};
 
 	const removeFile = (file: IConfigFile) => {
-		configFilesService.removeConfigFile(file).then((allFiles) => setConfigFiles(allFiles));
+		configFilesService.removeConfigFile(file).then((allFiles) => {
+			setConfigFiles(allFiles);
+			setCurrentTab(currentTab ? currentTab - 1 : currentTab);
+		});
 	};
 
 	const handleChangeTab = (newTab: number) => {
 		setCurrentTab(newTab);
-		setCurrentFile(configFiles && configFiles[newTab]);
 	};
 
 	const handleCheckbox = (configName: IConfigFile, event: any) => {
@@ -62,7 +65,12 @@ const ConfigurationOverrideComponent = () => {
 			</Box>
 			<Typography>Below you can add and edit configuration files</Typography>
 			<TabsComponent currentTab={currentTab} setCurrentTab={handleChangeTab} configFiles={configFiles} />
-			<TabPanelComponent onSaveFile={storeFile} onRemoveFile={removeFile} configFile={currentFile} index={currentTab} />
+			<TabPanelComponent
+				onSaveFile={storeFile}
+				onRemoveFile={removeFile}
+				configFile={configFiles[currentTab]}
+				index={currentTab}
+			/>
 
 			<footer className="configuration-override__footer">
 				<Box>
