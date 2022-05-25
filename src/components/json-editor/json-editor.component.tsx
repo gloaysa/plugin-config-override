@@ -14,9 +14,9 @@ interface JsonEditorComponentProps {
 const JsonEditorComponent: FunctionComponent<JsonEditorComponentProps> = ({ configFile, onChange }) => {
 	const jsonEditorRef = useRef<JsonEditor | null>(null);
 	const newConfigFile: IConfigFile = {
-		name: 'name of the file',
+		name: 'name of the file as it appears on `ubff?op=getConfigurations` call (e.g. billing-address-v1).',
 		file: {
-			key: 'replace file property with the json configuration'
+			replaceMe: 'replace the property and this text with the actual configuration.'
 		}
 	}
 

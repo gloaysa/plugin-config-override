@@ -5,13 +5,13 @@ Override configurations coming from configuration service
 ## Project Structure
 
 - src: Source files and app main file
-  - ./extensions: available extensions loaded in manifest (could be devtools_page, background, etc.)
-  - ./apps: app that each extension loads
-  - ./components: React Components
-  - ./assets: static files
-  - ./models: available interfaces
-  - ./services: app services
-- plugin: (after build) Chrome Extension directory
+  - ./extensions: available extensions loaded in manifest (could be devtools_page, background, etc.). Those are the first files to be loaded by Chrome. From there, the apps are then dynamically loaded.
+  - ./apps: app that each extension loads.
+  - ./components: React Components used by the apps.
+  - ./assets: static files.
+  - ./models: available interfaces.
+  - ./services: app services.
+- plugin: (after build) Chrome Extension directory (load this folder to use/test the plugin).
 
 ## Setup
 

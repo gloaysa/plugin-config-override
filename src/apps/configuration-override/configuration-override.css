@@ -1,0 +1,25 @@
+html,
+body {
+	height: 100%;
+}
+
+.configuration-override {
+	display: flex;
+	flex-direction: column;
+}
+
+.configuration-override__form-group {
+	display: flex;
+	flex-direction: row !important;
+	margin: 20px;
+}
+
+.form-group__checkbox {
+  width: 280px;
+}
+
+.configuration-override__footer {
+  color: gray;
+  margin-top: auto;
+  margin-bottom: 20px;
+}

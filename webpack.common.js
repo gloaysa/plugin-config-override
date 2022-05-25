@@ -10,7 +10,10 @@ module.exports = {
 	},
 	entry: {
 		['extensions/devtools']: path.resolve(__dirname, './src/extensions/devtools/devtools.ts'),
-		['apps/configuration-override/configuration-override']: path.resolve(__dirname, './src/apps/configuration-override/configuration-override.tsx'),
+		['apps/configuration-override/configuration-override']: path.resolve(
+			__dirname,
+			'./src/apps/configuration-override/configuration-override.tsx'
+		),
 	},
 	output: {
 		filename: '[name].js',

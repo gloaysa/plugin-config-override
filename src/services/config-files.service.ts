@@ -11,6 +11,22 @@ export class ConfigFilesService {
 		return this.instance;
 	}
 
+	public async storeFileOverride(configFile: IConfigFile, override: boolean): Promise<IConfigFile[]> {
+		const currentConfigFiles = await this.getAllConfigFiles();
+		const newConfigFiles = currentConfigFiles.map((existingFile) => {
+			if (existingFile.name === configFile.name) {
+				existingFile.override = override;
+				return existingFile;
+			}
+			return existingFile;
+		});
+		const storageObject: IChromeStorage = {
+			configurations: [...newConfigFiles],
+		};
+		await chrome.storage.local.set(storageObject);
+		return storageObject.configurations || [];
+	}
+
 	public storeConfigFile(file: IConfigFile): Promise<IConfigFile[]> {
 		return new Promise(async (resolve) => {
 			let newConfigFiles: IConfigFile[];
@@ -23,6 +39,7 @@ export class ConfigFilesService {
 					return existingFile;
 				});
 			} else {
+				file.override = false;
 				newConfigFiles = [...currentFiles, file];
 			}
 
@@ -48,6 +65,14 @@ export class ConfigFilesService {
 		});
 	}
 
+	public getAllConfigOverrides(): Promise<string[]> {
+		return new Promise((resolve) => {
+			chrome.storage.local.get(['overrides'], ({ overrides }) => {
+				resolve(overrides?.length ? overrides : []);
+			});
+		});
+	}
+
 	public getAllConfigFiles(): Promise<IConfigFile[]> {
 		return new Promise((resolve) => {
 			chrome.storage.local.get(['configurations'], ({ configurations }) => {
@@ -56,17 +81,14 @@ export class ConfigFilesService {
 		});
 	}
 
-	filterConfigurationsFromObject(filter: Record<any, string>): Promise<IConfigFile[] | undefined> {
-		return new Promise((resolve) => {
-			chrome.storage.local.get(['configurations'], ({ configurations }) => {
-				const filteredConfigurations = configurations?.filter((config: IConfigFile) => {
-					return Object.entries(filter).some(([mapValue, configRequested]) => {
-						config.mapValue = mapValue.replace('configName', 'getConfiguration');
-						return configRequested === config.name;
-					});
-				});
-				resolve(filteredConfigurations?.length ? filteredConfigurations : undefined);
+	async filterConfigurationsFromObject(filter: Record<any, string>): Promise<IConfigFile[] | undefined> {
+		const configurations = await this.getAllConfigFiles();
+		const filteredConfigurations = configurations?.filter((config: IConfigFile) => {
+			return Object.entries(filter).some(([mapValue, configRequested]) => {
+				config.mapValue = mapValue.replace('configName', 'getConfiguration');
+				return config.override && configRequested === config.name;
 			});
 		});
+		return filteredConfigurations?.length ? filteredConfigurations : undefined;
 	}
 }
