@@ -1,0 +1,15 @@
+.configuration-override__form-group {
+	display: flex;
+	flex-direction: row !important;
+	margin: 20px;
+}
+
+.form-group__checkbox {
+	display: flex;
+	width: 350px;
+	align-items: center;
+	justify-content: space-between;
+	border: 1px #1976d2 solid;
+	margin: 5px;
+	padding: 5px;
+}

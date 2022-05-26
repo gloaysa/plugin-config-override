@@ -13,16 +13,6 @@ body {
 	height: 100%;
 }
 
-.configuration-override__form-group {
-	display: flex;
-	flex-direction: row !important;
-	margin: 20px;
-}
-
-.form-group__checkbox {
-	width: 350px;
-}
-
 .configuration-override__footer {
 	color: gray;
 	margin-top: auto;

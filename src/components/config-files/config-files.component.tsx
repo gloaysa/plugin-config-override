@@ -9,6 +9,7 @@ interface IConfigFilesComponent {
 	onSaveExistingFile: (file: IConfigFile, callback: (files: IConfigFile[]) => void) => void;
 	onSaveNewFile: (file: IConfigFile, callback: (files: IConfigFile[]) => void) => void;
 	onRemoveFile: (file: IConfigFile, callback: (files: IConfigFile[]) => void) => void;
+	tabNumber?: number;
 }
 
 const ConfigFilesComponent: FunctionComponent<IConfigFilesComponent> = ({
@@ -16,8 +17,9 @@ const ConfigFilesComponent: FunctionComponent<IConfigFilesComponent> = ({
 	onSaveExistingFile,
 	onSaveNewFile,
 	onRemoveFile,
+	tabNumber = 0,
 }) => {
-	const [currentTab, setCurrentTab] = useState<number>(0);
+	const [currentTab, setCurrentTab] = useState<number>(tabNumber);
 	const [configFiles, setConfigFiles] = useState<IConfigFile[]>(configurationFiles);
 
 	useEffect(() => {

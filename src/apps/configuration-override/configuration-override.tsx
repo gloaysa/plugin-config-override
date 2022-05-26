@@ -48,6 +48,7 @@ const ConfigurationOverrideComponent = () => {
 	const [currentTab, setCurrentTab] = useState<number>(0);
 	const [configFiles, setConfigFiles] = useState<IConfigFile[]>([]);
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
+	const [filesTabNumber, setFilesTabNumber] = useState<number>(0);
 	let savingOverride = false;
 
 	useEffect(() => {
@@ -65,6 +66,11 @@ const ConfigurationOverrideComponent = () => {
 
 	const handleChangeTab = (newTab: number) => {
 		setCurrentTab(newTab);
+	};
+
+	const handleGoToFileFromConfig = (pageNumber: number) => {
+		setCurrentTab(TabIndex.Files);
+		setFilesTabNumber(pageNumber);
 	};
 
 	const handleCheckbox = (configName: IConfigFile, checked: boolean) => {
@@ -88,6 +94,7 @@ const ConfigurationOverrideComponent = () => {
 			callback(allFiles);
 			tabs[TabIndex.NewFile].hidden = true;
 			setCurrentTab(TabIndex.Files);
+			setFilesTabNumber(0);
 		});
 	};
 
@@ -132,6 +139,7 @@ const ConfigurationOverrideComponent = () => {
 								handleCheckbox={handleCheckbox}
 								configFiles={configFiles}
 								savingOverride={savingOverride}
+								onGoToFile={handleGoToFileFromConfig}
 							></ConfigCheckboxesComponent>
 						</Box>
 					)}
@@ -153,6 +161,7 @@ const ConfigurationOverrideComponent = () => {
 									onSaveExistingFile={saveExistingFile}
 									onRemoveFile={removeFile}
 									configurationFiles={configFiles}
+									tabNumber={filesTabNumber}
 								/>
 							</Box>
 						)}
