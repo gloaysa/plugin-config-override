@@ -3,9 +3,14 @@ body {
 	height: 100%;
 }
 
+#mock-panel {
+	height: 100%;
+}
+
 .configuration-override {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 }
 
 .configuration-override__form-group {
@@ -15,11 +20,11 @@ body {
 }
 
 .form-group__checkbox {
-  width: 280px;
+	width: 350px;
 }
 
 .configuration-override__footer {
-  color: gray;
-  margin-top: auto;
-  margin-bottom: 20px;
+	color: gray;
+	margin-top: auto;
+	margin-bottom: 20px;
 }

@@ -54,7 +54,8 @@ export class ConfigFilesService {
 			});
 		} else {
 			file.override = false;
-			newConfigFiles = [...currentFiles, file];
+			currentFiles.unshift(file);
+			newConfigFiles = currentFiles;
 		}
 
 		const storageObject: IChromeStorage = {
@@ -101,6 +102,6 @@ export class ConfigFilesService {
 			if (configurations) {
 				callback(configurations.newValue);
 			}
-		})
+		});
 	}
 }

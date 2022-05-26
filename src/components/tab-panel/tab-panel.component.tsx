@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import JsonEditorComponent from '@components/json-editor/json-editor.component';
 import { IConfigFile } from '@models/config-file.interface';
 import { Box, Button, IconButton } from '@mui/material';
@@ -12,14 +12,15 @@ interface TabPanelProps {
 	onRemoveFile: (fileToRemove: IConfigFile) => void;
 }
 
-const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onSaveExistingFile, onRemoveFile, onCreateNewFile }) => {
+const TabPanelComponent: FunctionComponent<TabPanelProps> = ({
+	configFile,
+	onSaveExistingFile,
+	onRemoveFile,
+	onCreateNewFile,
+}) => {
 	const [editedFile, setEditedFile] = useState<Record<string, any> | undefined>(configFile?.file);
 	const [newFile, setNewFile] = useState<IConfigFile | undefined>(configFile);
 	const [fileHasChanged, setFileHasChanged] = useState<boolean>(false);
-
-	useEffect(() => {
-		setFileHasChanged(false);
-	}, [configFile, setFileHasChanged])
 
 	const handleOnChange = (changedFile: IConfigFile) => {
 		setEditedFile(changedFile);
@@ -33,6 +34,7 @@ const TabPanelComponent: FunctionComponent<TabPanelProps> = ({ configFile, onSav
 		if (configFile && editedFile) {
 			configFile.file = editedFile;
 			onSaveExistingFile(configFile);
+			setFileHasChanged(false);
 		}
 	};
 

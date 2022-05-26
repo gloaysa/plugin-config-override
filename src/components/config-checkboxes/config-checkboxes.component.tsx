@@ -1,17 +1,20 @@
-import { Box, Checkbox, FormControlLabel, FormGroup, Typography } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import React, { FunctionComponent } from 'react';
 import { IConfigFile } from '@models/config-file.interface';
 
 interface IConfigCheckboxes {
 	configFiles: IConfigFile[];
 	savingOverride: boolean;
-	handleCheckbox: (configFile: IConfigFile, checked: boolean) => void
+	handleCheckbox: (configFile: IConfigFile, checked: boolean) => void;
 }
 
-const ConfigCheckboxesComponent: FunctionComponent<IConfigCheckboxes> = ({configFiles, savingOverride, handleCheckbox}) => {
+const ConfigCheckboxesComponent: FunctionComponent<IConfigCheckboxes> = ({
+	configFiles,
+	savingOverride,
+	handleCheckbox,
+}) => {
 	return (
 		<Box>
-			<Typography>Select the configurations that you want to override</Typography>
 			<FormGroup className="configuration-override__form-group">
 				{configFiles?.map((configFile, index) => (
 					<FormControlLabel
@@ -26,6 +29,6 @@ const ConfigCheckboxesComponent: FunctionComponent<IConfigCheckboxes> = ({config
 			</FormGroup>
 		</Box>
 	);
-}
+};
 
 export default ConfigCheckboxesComponent;

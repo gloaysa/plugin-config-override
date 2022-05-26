@@ -16,9 +16,9 @@ const JsonEditorComponent: FunctionComponent<JsonEditorComponentProps> = ({ conf
 	const newConfigFile: IConfigFile = {
 		name: 'name of the file as it appears on `ubff?op=getConfigurations` call (e.g. billing-address-v1).',
 		file: {
-			replaceMe: 'replace the property and this text with the actual configuration.'
-		}
-	}
+			replaceMe: 'replace the property and this text with the actual configuration.',
+		},
+	};
 
 	useEffect(() => {
 		if (jsonEditorRef.current !== null) {
@@ -27,7 +27,7 @@ const JsonEditorComponent: FunctionComponent<JsonEditorComponentProps> = ({ conf
 		}
 	}, [configFile?.file]);
 
-	const setRef = (instance: JsonEditor | null ) => {
+	const setRef = (instance: JsonEditor | null) => {
 		if (instance) {
 			jsonEditorRef.current = instance.jsonEditor;
 		} else {
@@ -43,7 +43,7 @@ const JsonEditorComponent: FunctionComponent<JsonEditorComponentProps> = ({ conf
 			theme="ace/theme/github"
 			value={configFile?.file ?? newConfigFile}
 			onChange={onChange}
-			htmlElementProps={{ style: { height: '80vh' } }}
+			htmlElementProps={{ style: { height: '60vh' } }}
 		/>
 	);
 };
