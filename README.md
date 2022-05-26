@@ -2,7 +2,9 @@
 
 Override configurations coming from configuration service
 
-You can download the latest version [here](./plugin.zip)
+You can download the latest version [here](./plugin.zip) and install it [following this guide](https://webkul.com/blog/how-to-install-the-unpacked-extension-in-chrome/).
+
+If you want to use it in incognito mode too, after installing the extension in Chrome, go to the extension Detail (by clicking on Details button inside the Chrome Extensions page) and select "Allow in incognito" from there.
 
 ## Project Structure
 

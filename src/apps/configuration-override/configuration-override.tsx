@@ -11,16 +11,34 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ConfigFilesComponent from '@components/config-files/config-files.component';
 import TabsComponent from '@components/tabs/tabs.component';
 import TabComponent from '@components/panel/tab.component';
+import InitialTemplateComponent from './initial-template/initial-template.component';
+import HowToFilesComponent from './how-to-files/how-to-files.component';
+import HowToConfigComponent from './how-to-config/how-to-config.component';
 
-const tabs = [
+enum TabIndex {
+	Configs = 0,
+	Files = 1,
+	NewFile = 2,
+}
+
+interface TabInit {
+	name: string;
+	index: number;
+	hidden?: boolean;
+}
+
+const tabs: TabInit[] = [
 	{
 		name: 'Select configs',
+		index: TabIndex.Configs,
 	},
 	{
 		name: 'JSON Files',
+		index: TabIndex.Files,
 	},
 	{
 		name: 'Add new file',
+		index: TabIndex.NewFile,
 		hidden: true,
 	},
 ];
@@ -35,7 +53,9 @@ const ConfigurationOverrideComponent = () => {
 	useEffect(() => {
 		configFilesService.getAllConfigFiles().then((files) => {
 			setConfigFiles(files);
-			configFilesService.onConfigChanges((filesChanged) => setConfigFiles(filesChanged));
+			configFilesService.onConfigChanges((filesChanged) => {
+				setConfigFiles(filesChanged);
+			});
 		});
 	}, [configFilesService, setConfigFiles]);
 
@@ -65,9 +85,9 @@ const ConfigurationOverrideComponent = () => {
 
 	const saveNewFile = (file: IConfigFile, callback: (files: IConfigFile[]) => void) => {
 		configFilesService.storeConfigFile(file).then((allFiles) => {
-			setCurrentTab(1);
-			tabs[2].hidden = true;
 			callback(allFiles);
+			tabs[TabIndex.NewFile].hidden = true;
+			setCurrentTab(TabIndex.Files);
 		});
 	};
 
@@ -78,8 +98,8 @@ const ConfigurationOverrideComponent = () => {
 	};
 
 	const handleGoToNewFile = () => {
-		tabs[2].hidden = false;
-		setCurrentTab(2);
+		tabs[TabIndex.NewFile].hidden = false;
+		setCurrentTab(TabIndex.NewFile);
 	};
 
 	const handleGetConfigurations = () => {
@@ -98,30 +118,48 @@ const ConfigurationOverrideComponent = () => {
 				<TopBarComponent onGetConfigsFromServer={onGetConfigsFromServer} onCreateNewFile={() => handleGoToNewFile()} />
 				<TabsComponent variant="fullWidth" currentTab={currentTab} setCurrentTab={handleChangeTab} tabs={tabs} />
 
-				<TabComponent value={currentTab} index={0}>
-					<Box>
-						<Typography>Select the configurations that you want to override</Typography>
-						<ConfigCheckboxesComponent
-							handleCheckbox={handleCheckbox}
-							configFiles={configFiles}
-							savingOverride={savingOverride}
-						></ConfigCheckboxesComponent>
-					</Box>
-				</TabComponent>
-
-				<TabComponent value={currentTab} index={1}>
-					<Box>
-						<Typography>Below you can add and edit configuration files</Typography>
-						<ConfigFilesComponent
-							onSaveNewFile={saveNewFile}
-							onSaveExistingFile={saveExistingFile}
-							onRemoveFile={removeFile}
-							configurationFiles={configFiles}
+				<TabComponent value={currentTab} index={TabIndex.Configs}>
+					{!configFiles.length ? (
+						<InitialTemplateComponent
+							onGetConfigsFromServer={onGetConfigsFromServer}
+							handleGoToNewFile={handleGoToNewFile}
 						/>
+					) : (
+						<Box>
+							<HowToConfigComponent />
+
+							<ConfigCheckboxesComponent
+								handleCheckbox={handleCheckbox}
+								configFiles={configFiles}
+								savingOverride={savingOverride}
+							></ConfigCheckboxesComponent>
+						</Box>
+					)}
+				</TabComponent>
+
+				<TabComponent value={currentTab} index={TabIndex.Files}>
+					<Box>
+						{!configFiles?.length ? (
+							<InitialTemplateComponent
+								onGetConfigsFromServer={onGetConfigsFromServer}
+								handleGoToNewFile={handleGoToNewFile}
+							/>
+						) : (
+							<Box>
+								<HowToFilesComponent />
+
+								<ConfigFilesComponent
+									onSaveNewFile={saveNewFile}
+									onSaveExistingFile={saveExistingFile}
+									onRemoveFile={removeFile}
+									configurationFiles={configFiles}
+								/>
+							</Box>
+						)}
 					</Box>
 				</TabComponent>
 
-				<TabComponent value={currentTab} index={2}>
+				<TabComponent value={currentTab} index={TabIndex.NewFile}>
 					<Box>
 						<Typography>Add a new file following the format</Typography>
 						<ConfigFilesComponent
@@ -143,11 +181,18 @@ const ConfigurationOverrideComponent = () => {
 			</footer>
 			<ModalComponent
 				title="Get configurations from server"
-				body="Are you sure? This will refresh the page, get the configurations as they are in the server and load them overriding your files in the extension."
 				open={modalOpen}
 				handleClose={() => setModalOpen(false)}
 				handleAccept={handleGetConfigurations}
-			/>
+			>
+				<Typography>
+					Are you sure? This will refresh the page, get the configurations as they are in the server and load them
+					overriding your files in the extension.
+				</Typography>
+				<Typography style={{ marginTop: '20px' }}>
+					Please don't use your browser until the page has finished loading.
+				</Typography>
+			</ModalComponent>
 		</Box>
 	);
 };

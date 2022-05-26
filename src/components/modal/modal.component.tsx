@@ -1,9 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { Box, Button, Modal, Typography } from '@mui/material';
+import { Box, Button, Divider, Modal, Typography } from '@mui/material';
 
 interface IModalComponent {
 	title: string;
-	body: string;
 	open: boolean;
 	handleClose: () => void;
 	handleAccept: () => void;
@@ -28,7 +27,7 @@ const style = {
 	},
 };
 
-const ModalComponent: FunctionComponent<IModalComponent> = ({ title, body, open, handleClose, handleAccept }) => {
+const ModalComponent: FunctionComponent<IModalComponent> = ({ title, open, handleClose, handleAccept, children }) => {
 	return (
 		<Modal
 			open={open}
@@ -40,15 +39,16 @@ const ModalComponent: FunctionComponent<IModalComponent> = ({ title, body, open,
 				<Typography id="modal-modal-title" variant="h6" component="h2">
 					{title}
 				</Typography>
-				<Typography id="modal-modal-description" sx={{ mt: 2 }}>
-					{body}
-				</Typography>
+
+				<Divider />
+
+				<Box style={{ marginTop: '20px' }}>{children}</Box>
 
 				<Box style={style.buttons}>
-					<Button color="primary" onClick={handleAccept}>
+					<Button color="primary" variant="contained" onClick={handleAccept}>
 						Accept
 					</Button>
-					<Button color="error" onClick={handleClose}>
+					<Button color="error" variant="contained" onClick={handleClose}>
 						NOPE
 					</Button>
 				</Box>
