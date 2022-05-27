@@ -1,0 +1,12 @@
+{
+	"manifest_version": 2,
+	"name": "oneshop-config-override",
+	"description": "Override configurations coming from oneshop-configuration",
+	"version": "1.2",
+	"icons": {
+		"48": "images/icons/icon-50.png",
+		"128": "images/icons/icon-128.png"
+	},
+	"devtools_page": "./extensions/devtools.html",
+	"permissions": ["webRequest", "webRequestBlocking", "debugger", "storage", "tabs", "<all_urls>"]
+}

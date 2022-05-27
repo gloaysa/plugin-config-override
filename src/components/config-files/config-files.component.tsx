@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import TabsComponent from '@components/tabs/tabs.component';
-import TabPanelComponent from '@components/tab-panel/tab-panel.component';
+import FilePanelComponent from '@components/file-panel/file-panel.component';
 import { IConfigFile } from '@models/config-file.interface';
 
 interface IConfigFilesComponent {
@@ -52,7 +52,7 @@ const ConfigFilesComponent: FunctionComponent<IConfigFilesComponent> = ({
 	return (
 		<Box>
 			<TabsComponent currentTab={currentTab} setCurrentTab={handleChangeTab} tabs={configFiles} />
-			<TabPanelComponent
+			<FilePanelComponent
 				onSaveExistingFile={saveExistingFile}
 				onCreateNewFile={saveNewFile}
 				onRemoveFile={removeFile}

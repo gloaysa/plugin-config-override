@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, PropsWithChildren } from 'react';
 import { Box, Button, Divider, Modal, Typography } from '@mui/material';
 
-interface IModalComponent {
+interface IModalComponent extends PropsWithChildren<any> {
 	title: string;
 	open: boolean;
 	handleClose: () => void;

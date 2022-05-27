@@ -18,7 +18,26 @@ module.exports = {
 	output: {
 		filename: '[name].js',
 		path: path.resolve(__dirname, 'plugin'),
+		assetModuleFilename: 'images/[hash][ext][query]',
 	},
+	plugins: [
+		new HtmlWebpackPlugin({
+			filename: 'extensions/devtools.html',
+			template: 'src/extensions/devtools/index.html',
+			chunks: ['extensions/devtools'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'apps/configuration-override/index.html',
+			template: 'src/apps/configuration-override/index.html',
+			chunks: ['apps/configuration-override/configuration-override'],
+		}),
+		new CopyWebpackPlugin({
+			patterns: [
+				{ from: 'manifest.json', to: '[name].[ext]' },
+				{ from: 'src/assets/icons/*.png', to: 'images/icons/[name].[ext]' },
+			],
+		}),
+	],
 	module: {
 		rules: [
 			{
@@ -47,30 +66,19 @@ module.exports = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
-			{test: /\.css$/, use: ['style-loader', 'css-loader'],},
-			{test: /\.svg$/, use: ['url-loader']}
+			{ test: /\.css$/, use: ['style-loader', 'css-loader'] },
+			{
+				test: /\.png/,
+				type: 'asset/resource',
+			},
+			{
+				test: /\.svg/,
+				type: 'asset/inline',
+			},
 		],
 	},
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js'],
 		plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
 	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			filename: 'extensions/devtools.html',
-			template: 'src/extensions/devtools/index.html',
-			chunks: ['extensions/devtools'],
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'apps/configuration-override/index.html',
-			template: 'src/apps/configuration-override/index.html',
-			chunks: ['apps/configuration-override/configuration-override'],
-		}),
-		new CopyWebpackPlugin({
-			patterns: [
-				{ from: 'src/manifest.json', to: '[name].[ext]' },
-				{ from: 'src/assets/images/*.png', to: 'assets/images/[name].[ext]' },
-			],
-		}),
-	],
 };

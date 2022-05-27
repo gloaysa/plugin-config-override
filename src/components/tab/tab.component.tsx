@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { Box } from '@mui/material';
 
-interface ITabComponent {
+interface IPanelComponent {
 	value: number;
 	index: number;
 }
 
-const TabComponent: FunctionComponent<ITabComponent> = ({ children, value, index, ...other }) => {
+const TabComponent: FunctionComponent<IPanelComponent> = ({ children, value, index, ...other }) => {
 	return (
 		<Box
 			role="tabpanel"

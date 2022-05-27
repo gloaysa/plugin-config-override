@@ -8,7 +8,7 @@ interface StyledTabProps {
 	hidden?: boolean;
 }
 
-interface TabsComponentProps {
+interface ITabsComponent {
 	currentTab: number;
 	setCurrentTab: (tabNumber: number) => void;
 	tabs?: { name: string; hidden?: boolean }[];
@@ -27,7 +27,7 @@ const AntTab = styled((props: StyledTabProps) => <Tab disableRipple {...props} /
 	display: hidden ? 'none' : 'flex',
 }));
 
-const TabsComponent: FunctionComponent<TabsComponentProps> = ({ currentTab, setCurrentTab, tabs, variant }) => {
+const TabsComponent: FunctionComponent<ITabsComponent> = ({ currentTab, setCurrentTab, tabs, variant }) => {
 	return (
 		<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 			<Tabs

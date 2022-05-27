@@ -4,7 +4,7 @@ import { IConfigFile } from '@models/config-file.interface';
 import { Box, Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-interface TabPanelProps {
+interface IEditorPanel {
 	index: number;
 	configFile?: IConfigFile;
 	onSaveExistingFile: (editedConfigFile: IConfigFile) => void;
@@ -12,7 +12,7 @@ interface TabPanelProps {
 	onRemoveFile: (fileToRemove: IConfigFile) => void;
 }
 
-const TabPanelComponent: FunctionComponent<TabPanelProps> = ({
+const NEditorPanelComponent: FunctionComponent<IEditorPanel> = ({
 	configFile,
 	onSaveExistingFile,
 	onRemoveFile,
@@ -73,4 +73,4 @@ const TabPanelComponent: FunctionComponent<TabPanelProps> = ({
 	);
 };
 
-export default TabPanelComponent;
+export default NEditorPanelComponent;

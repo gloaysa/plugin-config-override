@@ -10,7 +10,7 @@ import ModalComponent from '@components/modal/modal.component';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ConfigFilesComponent from '@components/config-files/config-files.component';
 import TabsComponent from '@components/tabs/tabs.component';
-import TabComponent from '@components/panel/tab.component';
+import TabComponent from '@components/tab/tab.component';
 import InitialTemplateComponent from './initial-template/initial-template.component';
 import HowToFilesComponent from './how-to-files/how-to-files.component';
 import HowToConfigComponent from './how-to-config/how-to-config.component';
@@ -188,6 +188,7 @@ const ConfigurationOverrideComponent = () => {
 					</Typography>
 				</Box>
 			</footer>
+
 			<ModalComponent
 				title="Get configurations from server"
 				open={modalOpen}
@@ -206,4 +207,4 @@ const ConfigurationOverrideComponent = () => {
 	);
 };
 
-render(<ConfigurationOverrideComponent />, document.querySelector('#mock-panel'));
+render(<ConfigurationOverrideComponent />, document.querySelector('#configuration-override'));

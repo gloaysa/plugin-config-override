@@ -22,7 +22,6 @@ const JsonEditorComponent: FunctionComponent<JsonEditorComponentProps> = ({ conf
 
 	useEffect(() => {
 		if (jsonEditorRef.current !== null) {
-			// @ts-ignore
 			jsonEditorRef.current.set(configFile?.file ?? newConfigFile);
 		}
 	}, [configFile?.file]);
@@ -36,6 +35,7 @@ const JsonEditorComponent: FunctionComponent<JsonEditorComponentProps> = ({ conf
 	};
 
 	return (
+		// @ts-ignore
 		<JsonEditor
 			ref={setRef}
 			mode="code"

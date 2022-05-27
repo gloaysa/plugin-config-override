@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Box, Button, Typography } from '@mui/material';
+import emptyPNG from '@images/empty.png';
 
 interface InitialTemplateComponent {
 	handleGoToNewFile: () => void;
@@ -19,7 +20,7 @@ const InitialTemplateComponent: FunctionComponent<InitialTemplateComponent> = ({
 	return (
 		<Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 			<Typography>Hey! It looks like you don't have any file saved yet.</Typography>
-			<img src="../../assets/images/empty.png" alt="By flat**** from Pngtree.com" />
+			<img src={emptyPNG} alt="By flat**** from Pngtree.com" />
 			<Box>
 				<Typography>You can add a new file by clicking the button below or through the top left menu.</Typography>
 				<Typography style={styles.paragraph}>
