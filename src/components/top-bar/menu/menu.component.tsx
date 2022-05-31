@@ -1,10 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import Paper from '@mui/material/Paper';
 import MenuItem from '@mui/material/MenuItem';
+import './menu.component.css';
 
 import { ListItemIcon, ListItemText, Menu, MenuList } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import WarningIcon from '@mui/icons-material/Warning';
+import BugReportIcon from '@mui/icons-material/BugReport';
 
 interface IMenuComponent {
 	open: boolean;
@@ -57,12 +59,26 @@ const MenuComponent: FunctionComponent<IMenuComponent> = ({
 						</ListItemIcon>
 						<ListItemText>Create new file</ListItemText>
 					</MenuItem>
-					<MenuItem onClick={() => handleSelection('getConfigs')}>
+
+					<MenuItem className="menu-item" onClick={() => handleSelection('getConfigs')}>
 						<ListItemIcon>
 							<WarningIcon fontSize="small" />
 						</ListItemIcon>
 						<ListItemText>Get configurations from server</ListItemText>
 					</MenuItem>
+
+					<li className="menu-item">
+						<MenuItem
+							component='a'
+							href="https://github.com/gloaysa/plugin-config-override/issues/new?template=bug_report.md"
+							target="__blank"
+						>
+							<ListItemIcon>
+								<BugReportIcon fontSize="small" />
+							</ListItemIcon>
+							<ListItemText>Report a problem</ListItemText>
+						</MenuItem>
+					</li>
 				</MenuList>
 			</Menu>
 		</Paper>
