@@ -47,6 +47,10 @@ export class DebuggerService {
 		return chrome.debugger.sendCommand(debuggerInstance, DebuggerFetch.continueResponse, commandParams);
 	}
 
+	continueRequest(debuggerInstance: chrome.debugger.Debuggee, commandParams: object): Promise<object | undefined> {
+		return chrome.debugger.sendCommand(debuggerInstance, DebuggerFetch.continueRequest, commandParams);
+	}
+
 	fulfillRequest(debuggerInstance: chrome.debugger.Debuggee, commandParams: object): Promise<object | undefined> {
 		return chrome.debugger.sendCommand(debuggerInstance, DebuggerFetch.fulfillRequest, commandParams);
 	}

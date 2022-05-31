@@ -25,6 +25,7 @@ export interface EventParams {
 
 export enum DebuggerFetch {
 	requestPaused = 'Fetch.requestPaused',
+	continueRequest = 'Fetch.continueRequest',
 	continueResponse = 'Fetch.continueResponse',
 	fulfillRequest = 'Fetch.fulfillRequest',
 	enable = 'Fetch.enable',

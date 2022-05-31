@@ -106,7 +106,7 @@ class Devtools {
 				if (method === DebuggerFetch.requestPaused && request.method !== 'OPTIONS') {
 					await this.overrideAndSendNewResponse(request, commandParams);
 				} else {
-					await this.debuggerService.continueResponse(this.debuggerInstance, commandParams);
+					await this.debuggerService.continueRequest(this.debuggerInstance, commandParams);
 				}
 			}
 		});
@@ -125,12 +125,12 @@ class Devtools {
 			for (const file of newFiles) {
 				await this.configFilesService.storeConfigFile(file);
 			}
-			return await this.debuggerService.continueResponse(this.debuggerInstance, commandParams);
+			return await this.debuggerService.continueRequest(this.debuggerInstance, commandParams);
 		}
 
 
 		if (!configurations) {
-			return await this.debuggerService.continueResponse(this.debuggerInstance, commandParams);
+			return await this.debuggerService.continueRequest(this.debuggerInstance, commandParams);
 		}
 
 		response.body.data = replaceConfigurations(data, configurations);
