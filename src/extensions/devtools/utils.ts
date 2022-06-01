@@ -14,7 +14,14 @@ export const replaceConfigurations = (
 	configurations: IConfigFile[]
 ): Record<string, any> => {
 	configurations.forEach(({ mapValue, file }) => {
-		body[mapValue as string] = file;
+		let newFile: Record<string, any> | null | undefined = file;
+		if (file['undefined']) {
+			newFile = undefined;
+		}
+		if (file['null']) {
+			newFile = null;
+		}
+		body[mapValue as string] = newFile;
 	});
 	return body;
 };
