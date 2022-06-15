@@ -14,6 +14,7 @@ import TabComponent from '@components/tab/tab.component';
 import InitialTemplateComponent from './initial-template/initial-template.component';
 import HowToFilesComponent from './how-to-files/how-to-files.component';
 import HowToConfigComponent from './how-to-config/how-to-config.component';
+import { version } from '../../version';
 
 enum TabIndex {
 	Configs = 0,
@@ -184,7 +185,7 @@ const ConfigurationOverrideComponent = () => {
 			<footer className="configuration-override__footer">
 				<Box>
 					<Typography align="center">
-						Made with <FavoriteIcon color="error" fontSize="small" /> by Guillermo Loaysa
+						Made with <FavoriteIcon color="error" fontSize="small" /> by Guillermo Loaysa version: {version}
 					</Typography>
 				</Box>
 			</footer>
