@@ -185,8 +185,9 @@ const ConfigurationOverrideComponent = () => {
 			<footer className="configuration-override__footer">
 				<Box>
 					<Typography align="center">
-						Made with <FavoriteIcon color="error" fontSize="small" /> by Guillermo Loaysa version: {version}
+						Made with <FavoriteIcon color="error" fontSize="small" /> by Guillermo Loaysa
 					</Typography>
+					<Typography className="configuration-override__footer-version">v{version}</Typography>
 				</Box>
 			</footer>
 

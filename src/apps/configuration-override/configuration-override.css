@@ -1,6 +1,6 @@
 html,
 body,
-#configuration-override{
+#configuration-override {
 	height: 100%;
 }
 
@@ -14,4 +14,8 @@ body,
 	color: gray;
 	margin-top: auto;
 	margin-bottom: 20px;
+}
+
+.configuration-override__footer-version {
+	text-align: right;
 }
