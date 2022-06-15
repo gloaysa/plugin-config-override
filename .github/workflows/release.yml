@@ -27,6 +27,11 @@ jobs:
       - run: npm test
       - name: Automated Version Bump
         uses: phips28/gh-action-bump-version@v9.0.20
+        with:
+          skip-commit:  'true'
+          skip-tag: 'true'
+          minor-wording: 'feat'
+          patch-wording: 'patch,fix,chore'
       - name: Build
         run: npm run build
       - name: Create Archive
